@@ -1,0 +1,10 @@
+library(xlsx)
+library(graphics)
+pathFile = "desample.csv"
+ele <- read.csv(pathFile, header = TRUE, sep = "," ,colClasses = c("NULL","NULL", "NULL", "NULL", "NULL","NULL", NA, NA))
+mereEle <- ele$Elevation# only elevatoin test 
+# method of 3R smooth
+mp <- ele$Milepost
+ele3R <- smooth(mereEle,"3R")
+ plot(mp,ele3R,main = "3R smooth", ylab = "elevation(ft)", xlab = "milepost")
+# lines(smooth(mereEle,"3R"))
