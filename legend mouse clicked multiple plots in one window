@@ -1,3 +1,8 @@
+''' the short code shows that to plot different graphs in one window in the same screen so as to be compareed with counterparts, the first graph can
+be done with plot functon, the second can be done with lines function ;
+
+    the second thing that legend can be added to the plot while location of the legend can be done by locator(1) function
+'''
 library(xlsx)
 library(graphics)
 library(RODBC)
