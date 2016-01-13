@@ -1,0 +1,9 @@
+# to make sure all the essential packages have been installed already
+filepath <- "desample.csv"# suppose I wanna import data from current directory and file name is desample.csv
+# parameter of colclasses are to specify columns that needs to be imported or omitted, while NULL means omit
+# nrows=12 means only import first 12 rows from the sheet
+elevationInput <- read.csv(filepath,header=TRUE,colclasses=c(”NULL”,”NULL”, ”NULL”, ”,”NULL”, ”NULL” ”,”NULL”, NA,NA), nrows=12)
+head(elevationInput)#means display first 6 rows of the total dataframe
+
+ele <- elevationInput
+ele <- ele[ele[,"Route_Name"]=="I-5",] # here to filter the columns that Route_Name is I-5 can be selected while others will be discarded
