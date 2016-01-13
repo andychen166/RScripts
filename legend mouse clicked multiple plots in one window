@@ -17,6 +17,6 @@ plot(elevation, col = "red", type = "b", pch=19,xlab="x", ylab="y")
 ele3R <- smooth(elevation,"3R")
 lines(ele3R, pch=18, col="blue", type = "b", lty=2)
 #legend  location can be added by clicking mouse
-legend(locator(1),legend = c("line 1", "line 2"), col = c("red", "blue"),lty=1:2,cex=0.8)
+legend(locator(1),legend = c("line 1", "line 2"), col = c("red", "blue"),lty=1:2,cex=0.8, pch=18:19)
 
 
