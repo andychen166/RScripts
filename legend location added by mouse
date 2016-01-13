@@ -1,0 +1,17 @@
+library(xlsx)
+library(graphics)
+library(RODBC)
+# the file to be imported, suppose it locates at the same folder as startup of R working directory
+pathFile = "test.csv" 
+#colClasses: select the columns to be imported
+ele <- read.csv(pathFile, header = TRUE, sep = "," )
+
+elevation <- ele$money# only elevatoin data extracted 
+plot(elevation, col = "red", type = "b", pch=19,xlab="x", ylab="y")
+
+ele3R <- smooth(elevation,"3R")
+lines(ele3R, pch=18, col="blue", type = "b", lty=2)
+#legend  location can be added by clicking mouse
+legend(locator(1),legend = c("line 1", "line 2"), col = c("red", "blue"),lty=1:2,cex=0.8)
+
+
