@@ -1,0 +1,67 @@
+ibrary(xlsx)
+library(graphics)
+library(RODBC)
+library(FKF)
+library(vcd)
+library(pastecs)
+library(psych)
+library(astsa)
+# # the file to be imported, suppose it locates at the same folder as startup of R working directory
+pathFile = "testDE.csv" 
+# #colClasses: select the columns to be imported
+ele <- read.csv(pathFile, header = TRUE, sep = "," , nrows = 300)
+selEleva <- ele$Elevation
+
+kalman <- function(A,G,C,Q,R,X0,P0,Z)
+{
+  X <- c(X0)
+  P <- c(P0)
+  X[1] <- X0
+  N <- length(Z)
+  I <- diag(dim(A)[1])
+  
+  for (i in 1:N) {
+    # predict error matrix
+    # Pp = A %*% P[i] %*% t(A) + G %*% Q %*% t(G)
+    Pp = A %*% P[i] %*% t(A) +  Q
+    # predict State
+    Xp = A %*% X[i]
+    # Kalman Gain
+    K = Pp %*% t(C) %*% solve(C %*% Pp %*% t(C) + R)
+    # state correction
+    X[i+1] = Xp + K %*% (Z[i] - C %*% Xp)
+    # filter error
+    # P[i+1] <- (I - K %*% C) %*% Pp %*% t(I - K %*% C) + K %*% R %*% t(K)
+    P[i+1] <- (I - K %*% C) %*% Pp 
+    
+  }
+  
+  # print(X[1:N+1])
+ 
+  return(X[1:N+1])
+}
+
+
+
+
+
+A<-matrix(c(1),nrow=1)
+G <-matrix(c(1),nrow=1)
+C <-matrix(c(1),nrow=1)
+Q<-matrix(c(2),nrow=1)
+R <-matrix(c(1),nrow=1)
+X0 <- 100
+P0 <- 20
+
+Z = selEleva[90:180]
+N <- length(Z)
+
+print("z is ")
+# print(Z)
+X = kalman(A,G,C,Q,R,X0,P0,Z)
+ # par(mfrow=c(1,2))
+plot(c(1:N), Z)
+lines(c(1:N), X)
+title("Estimate(line) and Measurement Values")
+#  plot(c(1:N), selEleva)                          
+#  lines(c(1:N), X)
