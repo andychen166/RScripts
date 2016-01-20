@@ -1,0 +1,129 @@
+# # require(graphics)
+# # # x1 <- c(4, 1, 3, 6, 6, 4, 1, 6, 2, 4, 2) # very artificial
+# # # (x3R <- smooth(x1, "3R")) # 2 iterations of "3"
+# # # smooth(x3R, kind = "S")
+# # 
+# # sm.3RS <- function(x, ...)
+# #   smooth(smooth(x, "3R", ...), "S", ...)
+# # 
+# # y <- c(1, 1, 19:1)
+# # plot(y, main = "misbehaviour of \"3RSR\"", col.main = 3)
+# # lines(sm.3RS(y))
+# # lines(smooth(y))
+# # lines(smooth(y, "3RSR"), col = 3, lwd = 2)  # the horror
+# classical test
+library(xlsx)
+library(graphics)
+library(RODBC)
+library(FKF)
+library(vcd)
+library(pastecs)
+library(psych)
+library(astsa)
+# # the file to be imported, suppose it locates at the same folder as startup of R working directory
+pathFile = "test.csv" 
+# #colClasses: select the columns to be imported
+ele <- read.csv(pathFile, header = TRUE, sep = "," , nrows = 20)
+describe(ele)
+se <- ele$elevation
+# # 
+# elevation <- ele$money# only elevatoin data extracted 
+# plot(elevation, col = "red", type = "b", pch=19,xlab="x", ylab="y")
+# ele3R <- smooth(elevation,"3R")
+# lines(ele3R, pch=18, col="blue", type = "b", lty=2)
+# 
+# # linear smooth
+# lines(filter(elevation,rep(1/2,2)), col="green", lty=3, pch=20,type="b")
+# 
+# KalmanSmooth(elevation,  T, nit = 0L)
+# 
+#             
+#legend  location can be added by clicking mouse
+# legend(locator(1),legend = c("line 1", "line 2","line 3"), col = c("red", "blue", "green"),lty=1:2,cex=0.8, pch=18:20)
+
+
+
+
+
+# # method of 3R smooth
+# # mp <- ele$Milepost
+# ele3R <- smooth(elevation,"3R")
+# # lines(elevation,col="red")
+# plot(ele3R,main = "3R smooth", ylab = "elevation(ft)", pch = 1, type = "b")
+
+# In case you can't see the differences in the 3 figures for this example, try this... 
+# Predictor, Filter, Smoother on Same Plot (not shown)
+
+
+
+
+
+
+
+
+
+	kalFunc <- function(A, P0, Q, C, Z, X0, R)
+  	{
+	  x <- c(X0)
+	  p <- c(P0)
+	  x[1] <- X0
+    N <- length(Z)
+    I <- diag(dim(A)[1])
+#       
+#    
+	      
+	     
+	  
+      for (k in 1:N)
+      	  {
+            # x[k+1] <- A %*% x[k]
+            xk <- A %*% x[k]
+            pk <- A %*% p[k] %*% t(A) + Q
+            k <- pk %*% t(C) %*% solve(C %*% pk %*% t(C) + R)
+            # x[k+1] <- x[k+1] + k %*% (Z[k] - C %*% x[k+1])
+            x[k+1] <- xk + k %*% (Z[k] - C %*% xk)
+            p[k+1] <- (I - k %*% C) %*% pk
+            
+#             Pp = A %*% P[i] %*% t(A) +  Q
+#             # predict State
+#             Xp = A %*% X[i]
+#             # Kalman Gain
+#             K = Pp %*% t(C) %*% solve(C %*% Pp %*% t(C) + R)
+#             # state correction
+#             X[i+1] = Xp + K %*% (Z[i] - C %*% Xp)
+#             # filter error
+#             # P[i+1] <- (I - K %*% C) %*% Pp %*% t(I - K %*% C) + K %*% R %*% t(K)
+#             P[i+1] <- (I - K %*% C) %*% Pp 
+            
+            
+            
+            
+        	    
+        	    
+        	  }
+    	  
+      return (x[1:N+1])
+    	}
+
+
+A <- matrix(c(1), nrow = 1)
+C <- matrix(c(1), nrow = 1)
+Q <- matrix(c(2), nrow = 1)
+R <- matrix(c(1), nrow = 1)
+# P0 <- matrix(c(1), nrow = 1)
+Z <- se
+
+
+
+x0 <- 100
+P0 <- 100
+# X = kalFunc(A, P0, Q, C, Z, x0, R)
+# par(mfrow=c(1,2))
+plot(c(1:length(Z)), Z)
+lines(c(1:length(Z)), X) 
+# 
+
+
+
+
+
