@@ -1,0 +1,54 @@
+Kalman <- function(X,P,A,Q,H,Z,k,R) {
+
+    for (i in 1:k) {
+      XKMinus <- A%*%X
+      
+      PKMinus <- A %*% P %*% t(A) + Q
+
+      Kk <- (PKMinus %*% t(H)) %*% (solve(H  %*% PKMinus %*% t(H) + R))
+      
+      X <- XKMinus + Kk %*% (Z - H %*% XKMinus)
+      
+      P <- (diag(nrow(A)) - Kk %*% H) %*% PKMinus
+    }
+  
+  return(X)
+}
+
+# consider n=4, m=3
+n <- 300
+m <- 300
+
+# assign random values for the matrices and vectors for now
+# X is n*1
+X <- matrix(runif(n,0,10),nrow=n,ncol=1)
+
+# A is n*n
+A <- matrix(runif(n*n,0,10),nrow=n,ncol=n)
+
+# Z is m*1
+Z <- matrix(runif(m,0,10),nrow=m,ncol=1)
+
+# P is n*n
+P <- matrix(runif(n*n,0,10),nrow=n,ncol=n)
+
+# R is m*m
+R <- matrix(runif(m*m,0,10),nrow=m,ncol=m)
+
+# Q is n*n?
+Q <- matrix(runif(n*n,0,10),nrow=n,ncol=n)
+
+# H is m*n
+H <- matrix(runif(m*n,0,10),nrow=m,ncol=n)
+
+k <- 10
+
+# Kalman(X,P,A,Q,H,Z,k,R)
+
+
+pathFile = "test.csv" 
+# #colClasses: select the columns to be imported
+ele <- read.csv(pathFile, header = TRUE, sep = "," , nrows = 300)
+se <- ele$elevation
+
+# m <- Kalman(X,P,A,Q,H,se,300,R)
